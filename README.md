@@ -16,6 +16,8 @@ Libraries source: https://github.com/alianse777/solidity-standard-library
 
 This benchmark contains Solidity libraries for matrix and vector management (VectorUtils and MatrixUtils). In addition to that, it contains the contract TestSortLib containing several funtions to test the library.
 
+Library source: https://github.com/NTA-Capital/SolMATe
+
 ### Sort
 
 This benchmark contains a Solidity library implementing different array sorting methods. In addition to that, it contains the contract TestArray composed of one instance of each array contract and several funtions to test the libraries.
