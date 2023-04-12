@@ -36,9 +36,9 @@ describe("Test Matrix Contract", function () {
 
     it("Should return", async function () {
       const Test = await ethers.getContractFactory("TestMatrixLib");
-      const test = await Test.deploy();
+      const test = await Test.deploy(matrixA, matrixB);
 
-      await test.testAddNum(matrixA, 10);
+      await test.testAddNum(10);
 
       expect(await test.getResult()).to.equal(true);
     });
@@ -48,9 +48,9 @@ describe("Test Matrix Contract", function () {
 
     it("Should return", async function () {
       const Test = await ethers.getContractFactory("TestMatrixLib");
-      const test = await Test.deploy();
+      const test = await Test.deploy(matrixA, matrixB);
 
-      await test.testAddMatrix(matrixA, matrixB);
+      await test.testAddMatrix();
 
       expect(await test.getResult()).to.equal(true);
     });
@@ -60,9 +60,9 @@ describe("Test Matrix Contract", function () {
 
     it("Should return", async function () {
       const Test = await ethers.getContractFactory("TestMatrixLib");
-      const test = await Test.deploy();
+      const test = await Test.deploy(matrixA, matrixB);
 
-      await test.testMulNum(matrixA, 10);
+      await test.testMulNum(10);
 
       expect(await test.getResult()).to.equal(true);
     });
@@ -72,9 +72,9 @@ describe("Test Matrix Contract", function () {
 
     it("Should return", async function () {
       const Test = await ethers.getContractFactory("TestMatrixLib");
-      const test = await Test.deploy();
+      const test = await Test.deploy(matrixA, matrixB);
 
-      await test.testDot(matrixA, matrixB);
+      await test.testDot();
 
       expect(await test.getResult()).to.equal(true);
     });
@@ -84,9 +84,9 @@ describe("Test Matrix Contract", function () {
 
     it("Should return", async function () {
       const Test = await ethers.getContractFactory("TestMatrixLib");
-      const test = await Test.deploy();
+      const test = await Test.deploy(matrixA, matrixB);
 
-      await test.testTranspose(matrixA);
+      await test.testTranspose();
 
       expect(await test.getResult()).to.equal(true);
     });
@@ -96,9 +96,9 @@ describe("Test Matrix Contract", function () {
 
     it("Should return", async function () {
       const Test = await ethers.getContractFactory("TestMatrixLib");
-      const test = await Test.deploy();
+      const test = await Test.deploy(matrixA, matrixB);
 
-      await test.testDiagonal(matrixA);
+      await test.testDiagonal();
 
       expect(await test.getResult()).to.equal(true);
     });

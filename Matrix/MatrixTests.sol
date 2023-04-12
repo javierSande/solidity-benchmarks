@@ -3,75 +3,26 @@ pragma solidity >=0.8.4;
 
 library VectorUtils {
 
-    function sqrt(int y) internal pure returns (int z) {
-      if (y > 3) {
-          z = y;
-          int x = y / 2 + 1;
-          while (x < z) {
-              z = x;
-              x = (y / x + x) / 2;
-          }
-      } else if (y != 0) {
-          z = 1;
-      }
-    }
-
-    function convertTo59x18(int256[] memory a) internal pure returns (int256[] memory) {
-        int256[] memory result = new int256[](a.length);
-        for (uint i=0; i<a.length; i++) {
-            result[i] = a[i]*1e18;
-        }
-        return result;
-    }
-
-    function normalize(int256[] memory a) internal pure returns (int256[] memory) {
-        int256 total = 0e18;
-        int256[] memory newVec = new int256[](a.length);
-        for (uint i=0; i<a.length; i++) {
-            // Square sum
-            total += a[i] * a[i];
-        }
-        for (uint i=0; i<a.length; i++) {
-            // Input normalized values
-            newVec[i] = a[i] / (sqrt(total));
-        }
-        return newVec;
-    }
-    function dot(int256[] memory a, int256[] memory b) internal pure returns (int256) {
+    function dot(int256[] storage a, int256[] storage b) internal view returns (int256) {
         int256 total = 0e18;
         for (uint i=0; i<a.length; i++) {
             total += a[i] * (b[i]);
         }
         return total;
     }
-    function add(int256[] memory a, int256[] memory b) internal pure returns (int256[] memory) {
+
+    function add(int256[] storage a, int256[] storage b) internal view returns (int256[] memory) {
         int256[] memory result = new int256[](a.length);
         for (uint i=0; i<a.length; i++) {
             result[i] = a[i] + b[i];
         }
         return result;
     }
-    function mul(int256[] memory a, int256 b) internal pure returns (int256[] memory) {
+
+    function mul(int256[] storage a, int256 b) internal view returns (int256[] memory) {
         int256[] memory result = new int256[](a.length);
         for (uint i=0; i<a.length; i++) {
             result[i] = a[i] * (b);
-        }
-        return result;
-    }
-    function projection(int256[] memory a, int256[] memory u) internal pure returns (int256[] memory) {
-        // Projects first vector onto second vector
-        int256 coeff = dot(u,a) * (dot(u,u));
-        int256[] memory result = mul(u,coeff);
-        return result;
-    }
-    function norm(int256[] memory a) internal pure returns (int256) {
-        return sqrt(dot(a,a));
-    }
-    function toMatrix(int256[] memory a) internal pure returns (int256[][] memory) {
-        int256[][] memory result = new int256[][](a.length);
-        for(uint i=0; i<a.length; i++) {
-            result[i] = new int256[](1);
-            result[i][0] = a[i];
         }
         return result;
     }
@@ -88,14 +39,7 @@ library MatrixUtils {
         return result;
     }
 
-    function convertTo59x18(int256[][] memory a) internal pure returns (int256[][] memory) {
-        int256[][] memory result = new int256[][](a.length);
-        for (uint i=0; i<a.length; i++) {
-            result[i] = a[i].convertTo59x18();
-        }
-        return result;
-    }
-    function outerProduct(int256[] memory a, int256[] memory b) internal pure returns (int256[][] memory) {
+    function outerProduct(int256[] storage a, int256[] storage b) internal view returns (int256[][] memory) {
         int256[][] memory result = createMatrix(a.length, b.length);
         for (uint i=0; i<a.length; i++) {
             for (uint j=0; j<b.length; j++) {
@@ -104,7 +48,8 @@ library MatrixUtils {
         }
         return result;
     }
-    function mul(int256[][] memory a, int256 b) internal pure returns (int256[][] memory) {
+
+    function mul(int256[][] storage a, int256 b) internal view returns (int256[][] memory) {
         int256[][] memory result = createMatrix(a.length, a[0].length);
         for (uint i=0; i<a.length; i++) {
             for (uint j=0; j<a[0].length; j++) {
@@ -113,7 +58,8 @@ library MatrixUtils {
         }
         return result;
     }
-    function add(int256[][] memory a, int256[][] memory b) internal pure returns (int256[][] memory) {
+
+    function add(int256[][] storage a, int256[][] storage b) internal view returns (int256[][] memory) {
         int256[][] memory result = createMatrix(a.length, a[0].length);
         for (uint i=0; i<a.length; i++) {
             for (uint j=0; j<a[0].length; j++) {
@@ -122,7 +68,8 @@ library MatrixUtils {
         }
         return result;
     }
-    function add(int256[][] memory a, int256 b) internal pure returns (int256[][] memory) {
+
+    function add(int256[][] storage a, int256 b) internal view returns (int256[][] memory) {
         int256[][] memory result = createMatrix(a.length, a[0].length);
         for (uint i=0; i<a.length; i++) {
             for (uint j=0; j<a[0].length; j++) {
@@ -131,7 +78,8 @@ library MatrixUtils {
         }
         return result;
     }
-    function dot(int256[][] memory a, int256[][] memory b) internal pure returns (int256[][] memory) {
+
+    function dot(int256[][] storage a, int256[][] storage b) internal view returns (int256[][] memory) {
         uint l1 = a.length;
         uint l2 = b[0].length;
         uint zipsize = b.length;
@@ -148,7 +96,8 @@ library MatrixUtils {
         }
         return c;
     }
-    function T(int256[][] memory a) internal pure returns (int256[][] memory) {
+
+    function T(int256[][] storage a) internal view returns (int256[][] memory) {
         int256[][] memory transpose = new int256[][](a[0].length);
         for (uint j=0; j<a[0].length; j++) {
             transpose[j] = new int256[](a.length);
@@ -158,7 +107,8 @@ library MatrixUtils {
         }
         return transpose;
     }
-    function diag(int256[][] memory a) internal pure returns (int256[] memory) {
+
+    function diag(int256[][] storage a) internal view returns (int256[] memory) {
         int256[] memory diagonal_vector = new int256[](a.length);
         for (uint i=0; i<a.length; i++) {
             diagonal_vector[i] = a[i][i];
@@ -166,7 +116,7 @@ library MatrixUtils {
         return diagonal_vector;
     }
 
-    function sliceVector(int256[][] memory a, uint dim1_start, uint dim1_end, uint dim2_start, uint dim2_end) internal pure returns (int256[] memory) {
+    function sliceVector(int256[][] storage a, uint dim1_start, uint dim1_end, uint dim2_start, uint dim2_end) internal view returns (int256[] memory) {
         if (dim1_start == dim1_end) {
             uint length = dim2_end - dim2_start;
             int256[] memory result = new int256[](length);
@@ -183,7 +133,8 @@ library MatrixUtils {
             return result;
         }
     }
-    function sliceMatrix(int256[][] memory a, uint dim1_start, uint dim1_end, uint dim2_start, uint dim2_end) internal pure returns (int256[][] memory) {
+
+    function sliceMatrix(int256[][] storage a, uint dim1_start, uint dim1_end, uint dim2_start, uint dim2_end) internal view returns (int256[][] memory) {
         uint dim1 = dim1_end - dim1_start;
         uint dim2 = dim2_end - dim2_start;
         int256[][] memory result = createMatrix(dim1, dim2);
@@ -194,14 +145,8 @@ library MatrixUtils {
         }
         return result;
     }
-    function eye(uint size) internal pure returns (int256[][] memory) {
-        int256[][] memory result = createMatrix(size,size);
-        for (uint i=0; i<size; i++) {
-            result[i][i] = 1e18;
-        }
-        return result;
-    }
-    function assign(int256[][] memory a, int256[][] memory b, uint i, uint j) internal pure returns (int256[][] memory) {
+
+    function assign(int256[][] storage a, int256[][] storage b, uint i, uint j) internal view returns (int256[][] memory) {
         int256[][] memory result = a;
         for (uint ii=0; ii<b.length; ii++) {
             for (uint jj=0; jj<b[0].length; jj++) {
@@ -210,209 +155,117 @@ library MatrixUtils {
         }
         return result;
     }
-    function QRDecompositionHouseholder(int256[][] memory a, int256[][] memory h_prev, uint pivot_idx) internal pure returns (int256[][] memory, int256[][] memory) {
-        // Find QR decomposition using Householder reflections
-        if ((a.length - pivot_idx < 1) || (a[0].length - pivot_idx < 1)) {
-            return (h_prev, a);
-        }
-        int256[][] memory a_sub = sliceMatrix(a,pivot_idx,a.length,pivot_idx,a[0].length);
-        int256[] memory a_1 = sliceVector(a_sub,0,a_sub.length,0,0);
-        int256[] memory e_1 = new int256[](a_sub.length);
-        e_1[0] = 1e18;
-        int256 sign;
-        if (a_1[0] > 0) {
-            sign = 1e18;
-        }
-        else {
-            sign = -1e18;
-        }
-        int256 prefactor = a_1.norm() * (sign);
-        int256[] memory v_1 = VectorUtils.add(a_1, VectorUtils.mul(e_1, prefactor));
-
-        // Set new prefactor for matrix computation
-        prefactor = -2e18;
-        prefactor = prefactor / (v_1.dot(v_1));
-        int256[][] memory h_1 = add(eye(a_sub.length), mul(outerProduct(v_1,v_1), prefactor));
-
-        int256[][] memory h1_full = eye(a.length);
-        h1_full = assign(h1_full, h_1, pivot_idx, pivot_idx);
-
-        int256[][] memory r_1 = dot(h1_full, a);
-
-        return QRDecompositionHouseholder(r_1, dot(h_prev, h1_full), pivot_idx+1);
-    }
-
-    function QRDecomposition(int256[][] memory a) internal pure returns (int256[][] memory, int256[][] memory) {
-        return QRDecompositionHouseholder(a, eye(a.length), 0);
-    }
-
-    function QRDecompositionGramSchmidt(int256[][] memory a) internal pure returns (int256[][] memory, int256[][] memory) {
-        // Get QR decomposition using Gram-Schmidt orthogonalization. Must be full-rank square matrix.
-        int256[][] memory q = createMatrix(a.length, a[0].length);
-
-        // Initialize U matrix
-        int256[][] memory u_columns = new int256[][](a[0].length);
-
-        // Populate U matrix
-        for (uint i=0; i<a[0].length; i++) {
-            // Grab the i'th column from a and store into a_column
-            int256[] memory a_column = new int256[](a.length);
-            int256[] memory u_column = new int256[](a.length);
-            int256[] memory e_column = new int256[](a.length);
-            for (uint j=0; j<a.length; j++) {
-                a_column[j] = a[j][i];
-            }
-            // Calculate the i'th U column
-            u_column = a_column; // Assume solidity copies arrays upon assignment (not necessarily true)
-            for (uint j=0; j<i; j++) {
-                u_column = VectorUtils.add(u_column, VectorUtils.mul(a_column.projection(u_columns[j]),-1e18));
-            }
-            u_columns[i] = u_column;
-
-            // Calculate the i'th E column
-            e_column = u_column.normalize();
-            //e_column = u_column;
-
-            // Load the E column into Q
-            for (uint j=0; j<a.length; j++) {
-                q[j][i] = e_column[j];
-            }
-        }
-        int256[][] memory r = dot(T(q),a);
-
-        return (q,r);
-    }
-
-    function eigenvalues(int256[][] memory a) internal pure returns (int256[] memory) {
-        int256[][] memory q;
-        int256[][] memory r;
-        for (uint i=0; i<15; i++) {
-            (q,r) = QRDecomposition(a);
-            a = dot(r, q);
-        }
-        return diag(a);
-    }
-
-    function backSubstitute(int256[][] memory u, int256[][] memory y) internal pure returns (int256[][] memory) {
-        // Solve the equation Ux = y where U is an mxn upper triangular matrix, y is length m, x is length n.
-        uint dim = u[0].length;
-        int256[][] memory x = createMatrix(dim, 1);
-        for (uint step=0; step<dim; step++) {
-            uint i = dim - step - 1;
-            int256 target = y[i][0];
-            // Subtract already-solved variables
-            for (uint step2=0; step2<step; step2++) {
-                uint j = dim - step2 - 1;
-                target = target - u[i][j] * (x[j][0]);
-            }
-            // Solve for unknown variable
-            x[i][0] = target / (u[i][i]);
-        }
-        return x;
-    }
 }
 
 contract TestMatrixLib {
 
-  bool result = false;
+    int256[][] matrixA;
+    int256[][] matrixB;
 
-  function getResult() public view returns(bool) {
-    return result;
-  }
-  
-  function testAddNum(int256[][] memory a, int256 b) public returns (bool) {
-    result = false;
+    bool result = false;
 
-    int256[][] memory m = MatrixUtils.add(a, b);
-
-    for(uint256 i = 0; i < a.length; i++) {
-        for(uint256 j = 0; j < a[0].length; j++)
-            if (m[i][j] != a[i][j] + b)
-                return false;
+    constructor(int256[][] memory a, int256[][] memory b) {
+        matrixA = a;
+        matrixB = b;
     }
 
-    result = true;
-    return true;
-  }
+    function getResult() public view returns(bool) {
+        return result;
+    }
+    
+    function testAddNum(int256 b) public returns (bool) {
+        result = false;
 
-  function testAddMatrix(int256[][] memory a, int256[][] memory b) public returns (bool) {
-    result = false;
+        int256[][] memory m = MatrixUtils.add(matrixA, b);
 
-    int256[][] memory m = MatrixUtils.add(a, b);
+        for(uint256 i = 0; i < matrixA.length; i++) {
+            for(uint256 j = 0; j < matrixA[0].length; j++)
+                if (m[i][j] != matrixA[i][j] + b)
+                    return false;
+        }
 
-    for(uint256 i = 0; i < a.length; i++) {
-        for(uint256 j = 0; j < a[0].length; j++)
-            if (m[i][j] != a[i][j] + b[i][j])
-                return false;
+        result = true;
+        return true;
     }
 
-    result = true;
-    return true;
-  }
+    function testAddMatrix() public returns (bool) {
+        result = false;
 
-  function testMulNum(int256[][] memory a, int256 b) public returns (bool) {
-    result = false;
+        int256[][] memory m = MatrixUtils.add(matrixA, matrixB);
 
-    int256[][] memory m = MatrixUtils.mul(a, b);
+        for(uint256 i = 0; i < matrixA.length; i++) {
+            for(uint256 j = 0; j < matrixA[0].length; j++)
+                if (m[i][j] != matrixA[i][j] + matrixB[i][j])
+                    return false;
+        }
 
-    for(uint256 i = 0; i < a.length; i++) {
-        for(uint256 j = 0; j < a[0].length; j++)
-            if (m[i][j] != a[i][j] * b)
-                return false;
+        result = true;
+        return true;
     }
 
-    result = true;
-    return true;
-  }
+    function testMulNum(int256 b) public returns (bool) {
+        result = false;
 
-  function testDot(int256[][] memory a, int256[][] memory b) public returns (bool) {
-    result = false;
+        int256[][] memory m = MatrixUtils.mul(matrixA, b);
 
-    MatrixUtils.dot(a, b);
+        for(uint256 i = 0; i < matrixA.length; i++) {
+            for(uint256 j = 0; j < matrixA[0].length; j++)
+                if (m[i][j] != matrixA[i][j] * b)
+                    return false;
+        }
 
-    result = true;
-    return true;
-  }
-
-  function testOuterProduct(int256[] memory a, int256[] memory b) public returns (bool) {
-    result = false;
-
-    int256[][] memory m = MatrixUtils.outerProduct(a, b);
-
-    for(uint256 i = 0; i < a.length; i++) {
-        for(uint256 j = 0; j < b.length; j++)
-            if (m[i][j] != a[i] * b[j])
-                return false;
+        result = true;
+        return true;
     }
 
-    return true;
-  }
+    function testDot() public returns (bool) {
+        result = false;
 
-  function testTranspose(int256[][] memory a) public returns (bool) {
-    result = false;
+        MatrixUtils.dot(matrixA, matrixB);
 
-    int256[][] memory t = MatrixUtils.T(a);
-
-    for(uint256 i = 0; i < a.length; i++) {
-        for(uint256 j = 0; j < a[0].length; j++)
-            if (t[i][j] != a[j][i])
-                return false;
+        result = true;
+        return true;
     }
 
-    result = true;
-    return true;
-  }
+    function testOuterProduct() public returns (bool) {
+        result = false;
 
-  function testDiagonal(int256[][] memory a) public returns (bool) {
-    result = false;
+        int256[][] memory m = MatrixUtils.outerProduct(matrixA[0], matrixB[0]);
 
-    int256[] memory d = MatrixUtils.diag(a);
+        for(uint256 i = 0; i < matrixA.length; i++) {
+            for(uint256 j = 0; j < matrixB.length; j++)
+                if (m[i][j] != matrixA[0][i] * matrixB[0][j])
+                    return false;
+        }
 
-    for(uint256 i = 0; i < a.length; i++)
-        if (d[i] != a[i][i])
-            return false;
+        return true;
+    }
 
-    result = true;
-    return true;
-  }
+    function testTranspose() public returns (bool) {
+        result = false;
+
+        int256[][] memory t = MatrixUtils.T(matrixA);
+
+        for(uint256 i = 0; i < matrixA.length; i++) {
+            for(uint256 j = 0; j < matrixA[0].length; j++)
+                if (t[i][j] != matrixA[j][i])
+                    return false;
+        }
+
+        result = true;
+        return true;
+    }
+
+    function testDiagonal() public returns (bool) {
+        result = false;
+
+        int256[] memory d = MatrixUtils.diag(matrixA);
+
+        for(uint256 i = 0; i < matrixA.length; i++)
+            if (d[i] != matrixA[i][i])
+                return false;
+
+        result = true;
+        return true;
+    }
 }
