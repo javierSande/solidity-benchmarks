@@ -58,4 +58,5 @@ In order to compile the smart contracts using a custom Solidity compiler we must
 * `source_file` is the path to the Solidity source file containing the contracts and libraries being executed.
 * If we want to apply any optimization, `optimization_options` is the list of the compiler optimization options, as specified by the compiler documentation.
 
-Doing this we will be compiling the source code usign the compiler version set as default on our computer (`solc --version`). If we want to compile using a different version, especially if we want to use an experimental or customized verison, we have to specify the absolute path to the compiler executable (`solc`): `./contractArtifacts.sh -c <path_solc> <source_file> [<optimization_options>]`.
+Doing this we will be compiling the source code usign the compiler version set as default on our computer (`solc --version`). If we want to compile using a different version, especially if we want to use an experimental or customized verison, we have to specify the absolute path to the compiler executable (`solc`):
+* `./contractArtifacts.sh -c <path_solc> <source_file> [<optimization_options>]`.
