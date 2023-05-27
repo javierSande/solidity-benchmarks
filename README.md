@@ -28,7 +28,7 @@ This benchmark contains a Solidity library implementing different array sorting 
 
 ## Testing enviroment
 
-The benchmarks can be executed using the [Hardhat](https://hardhat.org) development enviroment on Linux and MacOS computers. Folder`hardhatEnvironment` includes a Hardhat project with the smart contracts cource code and tests needed to run the benchmark.
+The benchmarks can be executed using the [Hardhat](https://hardhat.org) development enviroment on Linux and MacOS computers. Folder `hardhatEnvironment` includes a Hardhat project with the smart contracts cource code and tests needed to run the benchmark.
 
 ### Setup
 
@@ -38,3 +38,12 @@ In order to execute the benchmark using the provided Hardhat project you must:
 2. Install Hardhat on your computer using the [Hardhat installation guide](https://hardhat.org/hardhat-runner/docs/getting-started#installation).
 3. Intall the Hardhat [gas reporter](https://www.npmjs.com/package/hardhat-gas-reporter) tool using the command `npm install hardhat-gas-reporter --save-dev`.
 
+
+### Compilation
+
+
+### Test execution
+
+In order to executeute the execute the benchmark tests you have to:
+1. Open the terminal on the `hardhatEnvironment` folder.
+2. Execute the command `npx hardhat test`.
