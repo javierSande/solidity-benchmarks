@@ -38,12 +38,15 @@ In order to execute the benchmark using the provided Hardhat project you must:
 2. Install Hardhat on your computer using the [Hardhat installation guide](https://hardhat.org/hardhat-runner/docs/getting-started#installation).
 3. Intall the Hardhat [gas reporter](https://www.npmjs.com/package/hardhat-gas-reporter) tool using the command `npm install hardhat-gas-reporter --save-dev`.
 
-
-### Compilation
-
-
 ### Test execution
 
 In order to executeute the execute the benchmark tests you have to:
 1. Open the terminal on the `hardhatEnvironment` folder.
-2. Execute the command `npx hardhat test`.
+2. Compile the contracts with command `npx hardhat compile`.
+3. Execute the command `npx hardhat test`. If you want to execute only one specific test suite you can use the command `npx hardhat test test/<suite>.js`. If you want to execute the tests for the Sort library you should execute `npx hardhat test test/SortLibTests.js`.
+
+This will execute the test over the smart contracts compiled using the version of the Solidity compiler set as default by Hardhat.
+
+### Custom compilation
+
+In order to execute the tests over smart contracts compiled using any compiler version of the Solidity compiler, including experimental versions, we provide the script `contractArtifacts.sh`. This script will compile the specified source code and create the corresponding artifacts in the Hardhat.
